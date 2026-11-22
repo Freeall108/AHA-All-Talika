@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ব্যক্তি তথ্য ব্যবস্থাপনা — Version 1.9</title>
+<title>ব্যক্তি তথ্য ব্যবস্থাপনা — Version 2.0</title>
 <style>
 :root{--bg:#f3f6fb;--card:#fff;--ink:#172033;--muted:#6b7280;--primary:#3157d5;--line:#e5eaf2;--green:#15966b;--pink:#d94b83;--shadow:0 8px 28px rgba(24,39,75,.07)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif}
@@ -128,16 +128,64 @@ body.mobile-layout.sidebar-hidden .sidebar{display:flex!important}
 .back-btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 11px;border-radius:10px;cursor:pointer;font:inherit}
 @media(max-width:650px){.person-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.person-card{padding:10px}.person-card-head{gap:8px}.passport-photo{width:55px;height:71px}.person-card h3{font-size:14px}.person-card-actions .btn{padding:6px 8px;font-size:12px}}
 @media print{.person-grid{grid-template-columns:repeat(3,1fr)}.person-card{break-inside:avoid}}
+
+/* Version 2.0: eight view modes for people and photo gallery */
+.view-mode-toolbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:10px 0 14px;padding:8px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+.view-mode-toolbar .view-mode-label{font-size:12px;color:var(--muted);font-weight:700;margin:0 5px}
+.view-mode-btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 9px;font:inherit;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px}
+.view-mode-btn.active{background:#e9efff;color:#2447b7;border-color:#9bb0f5;box-shadow:0 0 0 1px #9bb0f5 inset}
+body.dark .view-mode-btn.active{background:#263b68;color:#fff;border-color:#607fc9}
+.people-view-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:13px}
+.people-view-grid .person-card{display:flex;flex-direction:column;gap:8px}
+.people-view-grid .passport-photo{width:70px;height:90px;object-fit:cover}
+.people-view-grid.view-extra-large{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.people-view-grid.view-extra-large .passport-photo{width:100px;height:130px}
+.people-view-grid.view-large{grid-template-columns:repeat(auto-fill,minmax(245px,1fr))}
+.people-view-grid.view-large .passport-photo{width:86px;height:112px}
+.people-view-grid.view-medium{grid-template-columns:repeat(auto-fill,minmax(205px,1fr))}
+.people-view-grid.view-small{grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:8px}
+.people-view-grid.view-small .person-card{padding:9px}.people-view-grid.view-small .passport-photo{width:45px;height:58px}
+.people-view-grid.view-list{display:flex;flex-direction:column;gap:7px}
+.people-view-grid.view-list .person-card{display:grid;grid-template-columns:minmax(150px,1fr) 2fr auto;align-items:center;padding:10px}
+.people-view-grid.view-list .person-card-head{align-items:center}
+.people-view-grid.view-tiles{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.people-view-grid.view-tiles .person-card{text-align:center;align-items:center}
+.people-view-grid.view-tiles .person-card-head{flex-direction:column;align-items:center}
+.people-view-grid.view-tiles .passport-photo{width:90px;height:116px}
+.people-view-grid.view-content{grid-template-columns:1fr}
+.people-view-grid.view-content .person-card{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px}
+.people-view-grid.view-content .person-card-head{grid-row:span 2}
+.people-view-grid.view-content .person-card-actions{grid-column:2}
+.people-view-grid.view-content .passport-photo{width:84px;height:108px}
+.people-table-details[hidden],.people-view-grid[hidden]{display:none!important}
+.photo-gallery.view-extra-large{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.photo-gallery.view-large{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.photo-gallery.view-medium{grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:11px}
+.photo-gallery.view-small{grid-template-columns:repeat(auto-fill,minmax(75px,1fr));gap:7px}
+.photo-gallery.view-list{display:flex;flex-direction:column;gap:7px}
+.photo-gallery.view-list .gallery-item{display:flex;align-items:center;gap:12px;text-align:left}
+.photo-gallery.view-list .gallery-item img{width:55px;height:70px;flex:0 0 auto}
+.photo-gallery.view-details{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.photo-gallery.view-details .gallery-item{display:grid;grid-template-columns:75px 1fr;align-items:center;text-align:left;gap:10px}
+.photo-gallery.view-details .gallery-item img{height:96px}
+.photo-gallery.view-tiles{grid-template-columns:repeat(auto-fill,minmax(125px,1fr))}
+.photo-gallery.view-content{grid-template-columns:1fr}
+.photo-gallery.view-content .gallery-item{display:flex;align-items:center;gap:14px;text-align:left;padding:12px}
+.photo-gallery.view-content .gallery-item img{width:70px;height:90px;flex:0 0 auto}
+.photo-gallery.view-extra-large .gallery-item img{aspect-ratio:7/9}
+@media(max-width:650px){.view-mode-toolbar{gap:5px}.view-mode-toolbar .view-mode-label{width:100%}.view-mode-btn{padding:6px 7px;font-size:11px}.people-view-grid.view-list .person-card{grid-template-columns:1fr;}.people-view-grid.view-content .person-card{grid-template-columns:auto minmax(0,1fr)}}
+
 </style>
 </head>
 <body>
 <div class="app-layout">
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="brand-info"><div class="brandmark">👥</div><div><b>People Manager v1.9</b><small>তথ্য ব্যবস্থাপনা</small></div></div><button class="sidebar-close" type="button" onclick="closeSidebarWithX()" aria-label="সাইডবার বন্ধ করুন" title="বন্ধ করুন">❌</button></div>
+  <div class="brand"><div class="brand-info"><div class="brandmark">👥</div><div><b>People Manager v2.0</b><small>তথ্য ব্যবস্থাপনা</small></div></div><button class="sidebar-close" type="button" onclick="closeSidebarWithX()" aria-label="সাইডবার বন্ধ করুন" title="বন্ধ করুন">❌</button></div>
   <button class="nav-item" onclick="toggleSidebarVisibility()"><span>☰</span> সাইডবার Show / Hide</button>
   <div class="nav-label">মেনু</div>
   <button class="nav-item active" onclick="goSection('dashboard',this)"><span>▦</span> ড্যাশবোর্ড</button>
   <button class="nav-item" onclick="goSection('people',this)"><span>♙</span> সকল ব্যক্তি</button>
+  <button class="nav-item" onclick="goSection('peoplePrint',this)"><span>🖨</span> সকল ব্যক্তি প্রিন্ট</button>
   <button class="nav-item" onclick="goSection('photos',this)"><span>▧</span> সকল ছবি</button>
   <button class="nav-item" onclick="openForm();closeSidebarMobile()"><span>＋</span> নতুন ব্যক্তি যোগ</button>
   <div class="nav-label">ব্যাকআপ ও ডেটা</div>
@@ -162,15 +210,30 @@ body.mobile-layout.sidebar-hidden .sidebar{display:flex!important}
  <div class="toolbar"><h2 style="margin:0">সকল ব্যক্তির তালিকা</h2><button class="btn" onclick="openForm()">＋ নতুন ব্যক্তি যোগ করুন</button></div>
  <div class="toolbar"><input class="search" id="search" placeholder="নাম, আইডি, পিতা/মাতার নাম দিয়ে খুঁজুন..." oninput="render()">
  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-<select id="exportGender" onchange="render()" aria-label="ব্যক্তির তালিকা ফিল্টার" title="যে ধরনের ব্যক্তি দেখতে চান নির্বাচন করুন" style="width:auto;min-width:125px"><option value="সব">সব ব্যক্তি</option><option value="পুরুষ">শুধু পুরুষ</option><option value="মহিলা">শুধু মহিলা</option><option value="অন্যান্য">শুধু অন্যান্য</option></select>
-<button class="btn secondary" onclick="printAll()">প্রিন্ট / PDF</button>
-<button class="btn secondary" onclick="downloadExcel()">Excel</button>
-<button class="btn secondary" onclick="downloadWord()">Word</button>
+<select id="exportGender" onchange="setGenderFilter(this.value)" aria-label="ব্যক্তির তালিকা ফিল্টার" title="যে ধরনের ব্যক্তি দেখতে চান নির্বাচন করুন" style="width:auto;min-width:125px"><option value="সব">সব ব্যক্তি</option><option value="পুরুষ">শুধু পুরুষ</option><option value="মহিলা">শুধু মহিলা</option><option value="অন্যান্য">শুধু অন্যান্য</option></select>
+<button class="btn secondary" onclick="printPeopleWithPhotos()">প্রিন্ট / PDF</button>
+<button class="btn secondary" onclick="downloadPeopleExcelWithPhotos()">Excel</button>
+<button class="btn secondary" onclick="downloadPeopleWordWithPhotos()">Word</button>
 </div></div>
- <div class="tablewrap"><table><thead><tr><th>সিরিয়াল নং</th><th>ছবি</th><th>নাম, আইডি ও জন্ম নিবন্ধন</th><th>মোবাইল</th><th>পিতা / মাতা</th><th>লিঙ্গ</th><th>ঠিকানা</th><th>কাজ</th></tr></thead><tbody id="rows"></tbody></table></div>
+ <div id="peopleViewModes" class="view-mode-toolbar" aria-label="সকল ব্যক্তির প্রদর্শন পদ্ধতি"></div>
+ <div id="peopleViewGrid" class="people-view-grid"></div>
+ <div class="tablewrap people-table-details" id="peopleDetailsTable" hidden><table><thead><tr><th>সিরিয়াল নং</th><th>ছবি</th><th>নাম, আইডি ও জন্ম নিবন্ধন</th><th>মোবাইল</th><th>পিতা / মাতা</th><th>লিঙ্গ</th><th>ঠিকানা</th><th>কাজ</th></tr></thead><tbody id="rows"></tbody></table></div>
  <div id="empty" class="empty">এখনো কোনো ব্যক্তির তথ্য যোগ করা হয়নি।</div>
 </section>
-<section class="panel view-section" id="photosSection" hidden><div class="toolbar"><h2 style="margin:0">সকল ব্যক্তির ছবি</h2><span class="hint">ছবিতে ক্লিক করলে ব্যক্তির বিস্তারিত তথ্য দেখাবে</span></div><div id="photoGallery" class="photo-gallery"></div><div id="galleryEmpty" class="empty" hidden>এখনো কোনো ছবি যোগ করা হয়নি।</div></section>
+<section class="panel view-section" id="peoplePrintSection" hidden>
+ <div class="toolbar"><h2 style="margin:0">সকল ব্যক্তি প্রিন্ট ও Export</h2><span class="hint">তালিকার মতো একই শ্রেণি নির্বাচন করে প্রিন্ট, Excel অথবা Word তৈরি করুন</span></div>
+ <div class="toolbar" style="justify-content:flex-start;gap:10px">
+  <label for="printGender" style="font-weight:600">ব্যক্তির ধরন:</label>
+  <select id="printGender" onchange="setGenderFilter(this.value)" aria-label="প্রিন্টের জন্য ব্যক্তির ধরন" style="width:auto;min-width:170px"><option value="সব">সব ব্যক্তি</option><option value="পুরুষ">শুধু পুরুষ</option><option value="মহিলা">শুধু মহিলা</option><option value="অন্যান্য">শুধু অন্যান্য</option></select>
+ </div>
+ <div class="actions" style="margin-top:8px">
+  <button class="btn secondary" type="button" onclick="printAll()">প্রিন্ট / PDF</button>
+  <button class="btn secondary" type="button" onclick="downloadExcel()">Excel</button>
+  <button class="btn secondary" type="button" onclick="downloadWord()">Word</button>
+ </div>
+ <p class="hint" id="printSelectionHint">নির্বাচিত শ্রেণির সকল ব্যক্তির তথ্য Export হবে।</p>
+</section>
+<section class="panel view-section" id="photosSection" hidden><div class="toolbar"><h2 style="margin:0">সকল ব্যক্তির ছবি</h2><span class="hint">ছবিতে ক্লিক করলে ব্যক্তির বিস্তারিত তথ্য দেখাবে</span></div><div id="photosViewModes" class="view-mode-toolbar" aria-label="ছবি প্রদর্শনের পদ্ধতি"></div><div id="photoGallery" class="photo-gallery"></div><div id="galleryEmpty" class="empty" hidden>এখনো কোনো ছবি যোগ করা হয়নি।</div></section>
 </main>
 </div></div>
 <div class="modal" id="formModal"><div class="modalbox">
@@ -203,10 +266,30 @@ function putPerson(p){return new Promise((resolve,reject)=>{const r=db.transacti
 function deletePerson(id){return new Promise((resolve,reject)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).delete(id);r.onsuccess=resolve;r.onerror=()=>reject(r.error)})}
 function toast(s){$('toast').textContent=s;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2400)}
 let photoItems=[],photoPosition=0;
+const VIEW_MODES=[
+ {id:'extra-large',label:'Extra large icons',icon:'▣'},
+ {id:'large',label:'Large icons',icon:'▦'},
+ {id:'medium',label:'Medium icons',icon:'▤'},
+ {id:'small',label:'Small icons',icon:'▥'},
+ {id:'list',label:'List',icon:'☷'},
+ {id:'details',label:'Details',icon:'☰'},
+ {id:'tiles',label:'Tiles',icon:'▧'},
+ {id:'content',label:'Content',icon:'▣'}
+];
+let peopleViewMode='medium',photosViewMode='medium';
+function buildViewModeButtons(containerId,active,kind){const el=$(containerId);if(!el)return;el.innerHTML='<span class="view-mode-label">প্রদর্শন:</span>'+VIEW_MODES.map(m=>`<button type="button" class="view-mode-btn ${active===m.id?'active':''}" aria-pressed="${active===m.id}" title="${m.label}" onclick="setViewMode('${kind}','${m.id}')"><span>${m.icon}</span><span>${m.label}</span></button>`).join('');}
+function setViewMode(kind,mode){if(!VIEW_MODES.some(m=>m.id===mode))return;if(kind==='people')peopleViewMode=mode;else photosViewMode=mode;try{localStorage.setItem('personManager_'+kind+'View',mode)}catch(e){}render();}
+function applyViewModes(){buildViewModeButtons('peopleViewModes',peopleViewMode,'people');buildViewModeButtons('photosViewModes',photosViewMode,'photos');$('peopleViewGrid').className='people-view-grid view-'+peopleViewMode;$('peopleDetailsTable').hidden=peopleViewMode!=='details';$('peopleViewGrid').hidden=peopleViewMode==='details';$('photoGallery').className='photo-gallery view-'+photosViewMode;}
+try{peopleViewMode=localStorage.getItem('personManager_peopleView')||'medium';photosViewMode=localStorage.getItem('personManager_photosView')||'medium';if(!VIEW_MODES.some(m=>m.id===peopleViewMode))peopleViewMode='medium';if(!VIEW_MODES.some(m=>m.id===photosViewMode))photosViewMode='medium'}catch(e){}
+function setGenderFilter(value){const allowed=['সব','পুরুষ','মহিলা','অন্যান্য'];const selected=allowed.includes(value)?value:'সব';if($('exportGender'))$('exportGender').value=selected;if($('printGender'))$('printGender').value=selected;const hint=$('printSelectionHint');if(hint)hint.textContent=(selected==='সব'?'সব ব্যক্তির':selected==='পুরুষ'?'শুধু পুরুষদের':selected==='মহিলা'?'শুধু মহিলাদের':'শুধু অন্যান্য শ্রেণির')+' তথ্য প্রিন্ট / Excel / Word-এ যাবে।';render();}
 async function render(){let people=await allPeople(),q=$('search').value.trim().toLowerCase(),genderFilter=$('exportGender')?.value||'সব';$('total').textContent=bn(people.length);$('male').textContent=bn(people.filter(p=>p.gender==='পুরুষ').length);$('female').textContent=bn(people.filter(p=>p.gender==='মহিলা').length);
 let filtered=people.filter(p=>(genderFilter==='সব'||p.gender===genderFilter)&&[p.name,p.nid,p.birthReg,p.phone,p.father,p.mother,p.address].join(' ').toLowerCase().includes(q)).sort((a,b)=>(b.updated||b.created||0)-(a.updated||a.created||0));
-$('rows').innerHTML=filtered.map((p,i)=>`<tr><td>${bn(i+1)}</td><td>${p.photos?.length?`<img class="photo-thumb" onclick="showLargePhoto('${p.id}',0)" src="${p.photos[0]}" alt="ছবি">`:'—'}</td><td><b>${esc(p.name)}</b><br><small>আইডি: ${esc(p.nid||'—')}</small><br><small>জন্ম নিবন্ধন: ${esc(p.birthReg||'—')}</small></td><td>${esc(p.phone||'—')}</td><td>${esc(p.father||'—')}<br>${esc(p.mother||'—')}</td><td><span class="tag ${p.gender==='মহিলা'?'f':''}">${esc(p.gender)}</span></td><td>${esc(p.address||'—')}</td><td><button class="btn secondary" onclick="viewPerson('${p.id}')">দেখুন</button> <button class="btn gray" onclick="editPerson('${p.id}')">এডিট</button> <button class="btn danger" onclick="removePerson('${p.id}')">মুছুন</button></td></tr>`).join('');
-$('empty').textContent=filtered.length?'':'নির্বাচিত শ্রেণিতে কোনো ব্যক্তির তথ্য পাওয়া যায়নি।';$('empty').style.display=filtered.length?'none':'block';$('dashboardPeople').innerHTML=people.slice().sort((a,b)=>(b.updated||b.created||0)-(a.updated||a.created||0)).map(p=>`<article class="person-card"><div class="person-card-head">${p.photos?.length?`<img class="passport-photo photo-thumb" src="${p.photos[0]}" onclick="showLargePhoto('${p.id}',0)" alt="${esc(p.name)}">`:'<div class="passport-photo"></div>'}<div><h3>${esc(p.name)}</h3><div class="person-meta">আইডি: ${esc(p.nid||'—')}<br>মোবাইল: ${esc(p.phone||'—')}<br>লিঙ্গ: ${esc(p.gender||'—')}</div></div></div><div class="person-meta">পিতা: ${esc(p.father||'—')}<br>মাতা: ${esc(p.mother||'—')}<br>ঠিকানা: ${esc(p.address||'—')}</div><div class="person-card-actions"><button class="btn secondary" onclick="viewPerson('${p.id}')">বিস্তারিত</button></div></article>`).join('');$('dashboardPeopleEmpty').hidden=people.length>0;const gallery=people.flatMap(p=>(p.photos||[]).map((src,index)=>({p,src,index})));$('photoGallery').innerHTML=gallery.map(({p,src,index})=>`<button class="gallery-item" onclick="openPersonFromGallery('${p.id}')"><img src="${src}" alt="${esc(p.name)}"><small>${esc(p.name)}</small></button>`).join('');$('galleryEmpty').hidden=gallery.length>0;}
+$('rows').innerHTML=filtered.map((p,i)=>`<tr><td>${bn(i+1)}</td><td>${p.photos?.length?`<img class="photo-thumb passport-photo" onclick="showLargePhoto('${p.id}',0)" src="${p.photos[0]}" alt="ছবি">`:'—'}</td><td><b>${esc(p.name)}</b><br><small>আইডি: ${esc(p.nid||'—')}</small><br><small>জন্ম নিবন্ধন: ${esc(p.birthReg||'—')}</small></td><td>${esc(p.phone||'—')}</td><td>${esc(p.father||'—')}<br>${esc(p.mother||'—')}</td><td><span class="tag ${p.gender==='মহিলা'?'f':''}">${esc(p.gender)}</span></td><td>${esc(p.address||'—')}</td><td><button class="btn secondary" onclick="viewPerson('${p.id}')">দেখুন</button> <button class="btn gray" onclick="editPerson('${p.id}')">এডিট</button> <button class="btn danger" onclick="removePerson('${p.id}')">মুছুন</button></td></tr>`).join('');
+$('peopleViewGrid').innerHTML=filtered.map((p,i)=>`<article class="person-card"><div class="person-card-head">${p.photos?.length?`<img class="passport-photo photo-thumb" src="${p.photos[0]}" onclick="showLargePhoto('${p.id}',0)" alt="${esc(p.name)}">`:'<div class="passport-photo"></div>'}<div><h3>${bn(i+1)}. ${esc(p.name)}</h3><div class="person-meta">আইডি: ${esc(p.nid||'—')}<br>জন্ম নিবন্ধন: ${esc(p.birthReg||'—')}<br>মোবাইল: ${esc(p.phone||'—')}<br>লিঙ্গ: ${esc(p.gender||'—')}</div></div></div><div class="person-meta">পিতা: ${esc(p.father||'—')}<br>মাতা: ${esc(p.mother||'—')}<br>ঠিকানা: ${esc(p.address||'—')}</div><div class="person-card-actions"><button class="btn secondary" onclick="viewPerson('${p.id}')">বিস্তারিত</button><button class="btn gray" onclick="editPerson('${p.id}')">এডিট</button></div></article>`).join('');
+$('empty').textContent=filtered.length?'':'নির্বাচিত শ্রেণিতে কোনো ব্যক্তির তথ্য পাওয়া যায়নি।';$('empty').style.display=filtered.length?'none':'block';
+$('dashboardPeople').innerHTML=people.slice().sort((a,b)=>(b.updated||b.created||0)-(a.updated||a.created||0)).map(p=>`<article class="person-card"><div class="person-card-head">${p.photos?.length?`<img class="passport-photo photo-thumb" src="${p.photos[0]}" onclick="showLargePhoto('${p.id}',0)" alt="${esc(p.name)}">`:'<div class="passport-photo"></div>'}<div><h3>${esc(p.name)}</h3><div class="person-meta">আইডি: ${esc(p.nid||'—')}<br>মোবাইল: ${esc(p.phone||'—')}<br>লিঙ্গ: ${esc(p.gender||'—')}</div></div></div><div class="person-meta">পিতা: ${esc(p.father||'—')}<br>মাতা: ${esc(p.mother||'—')}<br>ঠিকানা: ${esc(p.address||'—')}</div><div class="person-card-actions"><button class="btn secondary" onclick="viewPerson('${p.id}')">বিস্তারিত</button></div></article>`).join('');$('dashboardPeopleEmpty').hidden=people.length>0;
+const gallery=people.flatMap(p=>(p.photos||[]).map((src,index)=>({p,src,index})));$('photoGallery').innerHTML=gallery.map(({p,src,index})=>`<button class="gallery-item" onclick="openPersonFromGallery('${p.id}')"><img src="${src}" alt="${esc(p.name)}"><small><b>${esc(p.name)}</b><br>${esc(p.nid||'')}</small></button>`).join('');$('galleryEmpty').hidden=gallery.length>0;applyViewModes();}
+
 function digitsOnly(value){return String(value||'').trim().replace(/[০-৯]/g,d=>String('০১২৩৪৫৬৭৮৯'.indexOf(d))).replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function openForm(p){$('personForm').reset();$('personId').value=p?.id||'';$('formTitle').textContent=p?'তথ্য সম্পাদনা':'নতুন ব্যক্তির তথ্য';selectedPhotos=p?.photos?[...p.photos]:[];$('name').value=p?.name||'';$('nid').value=p?.nid||'';$('birthReg').value=p?.birthReg||'';$('phone').value=p?.phone||'';$('father').value=p?.father||'';$('mother').value=p?.mother||'';$('address').value=p?.address||'';document.querySelector(`input[name="gender"][value="${p?.gender||'পুরুষ'}"]`).checked=true;$('photos').value='';showPreview();$('formModal').classList.add('show')}
@@ -229,16 +312,23 @@ function paintPhoto(){if(!photoItems.length)return;const item=photoItems[photoPo
 function navigatePhoto(step){if(!photoItems.length)return;photoPosition=(photoPosition+step+photoItems.length)%photoItems.length;paintPhoto()}
 document.addEventListener('keydown',e=>{if(!$('lightbox').classList.contains('show'))return;if(e.key==='ArrowLeft')navigatePhoto(-1);else if(e.key==='ArrowRight')navigatePhoto(1);else if(e.key==='Escape')$('lightbox').classList.remove('show')});
 function tableRows(people){return people.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.nid||'')}</td><td>${esc(p.birthReg||'')}</td><td>${esc(p.phone||'')}</td><td>${esc(p.father||'')}</td><td>${esc(p.mother||'')}</td><td>${esc(p.gender||'')}</td><td>${esc(p.address||'')}</td></tr>`).join('')}
+function photoTableRows(people){return people.map((p,i)=>{const photo=p.photos&&p.photos[0]?`<img src="${esc(p.photos[0])}" alt="${esc(p.name)}" class="person-print-photo">`:'<span>ছবি নেই</span>';return `<tr><td>${bn(i+1)}</td><td class="photo-cell">${photo}</td><td><b>${esc(p.name)}</b><br><small>আইডি: ${esc(p.nid||'—')}</small><br><small>জন্ম নিবন্ধন: ${esc(p.birthReg||'—')}</small></td><td>${esc(p.phone||'—')}</td><td>${esc(p.father||'—')}<br>${esc(p.mother||'—')}</td><td>${esc(p.gender||'—')}</td><td>${esc(p.address||'—')}</td></tr>`}).join('')}
+function selectedPeople(selectId){const g=$(selectId)?.value||'সব';return allPeople().then(list=>({g,people:list.filter(p=>g==='সব'||p.gender===g).sort((a,b)=>(a.created||0)-(b.created||0))}))}
 function exportBlob(content,type,filename){const blob=new Blob(['\ufeff',content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-async function downloadExcel(){const g=$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const doc=`<html><head><meta charset="UTF-8"></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table border="1"><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;exportBlob(doc,'application/vnd.ms-excel;charset=utf-8','person-list.xls');toast('Excel ফাইল ডাউনলোড হয়েছে')}
-async function downloadWord(){const g=$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const doc=`<html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif}table{border-collapse:collapse;width:100%}td,th{border:1px solid #777;padding:6px;text-align:left}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;exportBlob(doc,'application/msword;charset=utf-8','person-list.doc');toast('Word ফাইল ডাউনলোড হয়েছে')}
-async function printAll(){const g=$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const w=window.open('','_blank');if(!w){alert('প্রিন্টের জন্য পপ-আপ অনুমতি দিন।');return}w.document.write(`<html><head><meta charset="UTF-8"><title>ব্যক্তি তথ্য তালিকা</title><style>body{font-family:Arial,sans-serif;padding:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #555;padding:7px;text-align:left;font-size:12px}h2{text-align:center}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()}
+async function downloadExcel(){const g=$('printGender')?.value||$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const doc=`<html><head><meta charset="UTF-8"></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table border="1"><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;exportBlob(doc,'application/vnd.ms-excel;charset=utf-8','person-list.xls');toast('Excel ফাইল ডাউনলোড হয়েছে')}
+async function downloadWord(){const g=$('printGender')?.value||$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const doc=`<html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif}table{border-collapse:collapse;width:100%}td,th{border:1px solid #777;padding:6px;text-align:left}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;exportBlob(doc,'application/msword;charset=utf-8','person-list.doc');toast('Word ফাইল ডাউনলোড হয়েছে')}
+async function printAll(){const g=$('printGender')?.value||$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const w=window.open('','_blank');if(!w){alert('প্রিন্টের জন্য পপ-আপ অনুমতি দিন।');return}w.document.write(`<html><head><meta charset="UTF-8"><title>ব্যক্তি তথ্য তালিকা</title><style>body{font-family:Arial,sans-serif;padding:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #555;padding:7px;text-align:left;font-size:12px}h2{text-align:center}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()}
+
+
+async function printPeopleWithPhotos(){const {g,people}=await selectedPeople('exportGender');const rows=photoTableRows(people);const w=window.open('','_blank');if(!w){alert('প্রিন্টের জন্য পপ-আপ অনুমতি দিন।');return}w.document.write(`<!doctype html><html lang="bn"><head><meta charset="UTF-8"><title>সকল ব্যক্তির ছবি সহ তালিকা</title><style>@page{size:A4 landscape;margin:10mm}body{font-family:"Noto Sans Bengali",Arial,sans-serif;padding:10px;color:#172033}h2{text-align:center;margin:0 0 8px}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{border:1px solid #555;padding:7px;text-align:left;font-size:11px;vertical-align:middle;overflow-wrap:anywhere}th{background:#f1f4fa}.person-print-photo{width:24mm;height:30mm;object-fit:contain;display:block;margin:auto}.photo-cell{text-align:center;width:32mm}tr{break-inside:avoid}small{font-size:9px}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${bn(people.length)} জন</p><table><thead><tr><th style="width:9mm">সিরিয়াল নং</th><th style="width:32mm">ছবি</th><th>নাম, আইডি ও জন্ম নিবন্ধন</th><th>মোবাইল</th><th>পিতা / মাতা</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>setTimeout(()=>window.print(),400)<\/script></body></html>`);w.document.close()}
+async function downloadPeopleExcelWithPhotos(){const {g,people}=await selectedPeople('exportGender');const rows=photoTableRows(people);const doc=`<!doctype html><html lang="bn"><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif}table{border-collapse:collapse;width:100%}td,th{border:1px solid #777;padding:7px;text-align:left;vertical-align:middle}.person-print-photo{width:90px;height:115px;object-fit:contain}.photo-cell{text-align:center}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${bn(people.length)} জন</p><table><thead><tr><th>সিরিয়াল নং</th><th>ছবি</th><th>নাম, আইডি ও জন্ম নিবন্ধন</th><th>মোবাইল</th><th>পিতা / মাতা</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;exportBlob(doc,'application/vnd.ms-excel;charset=utf-8','person-list-with-photos.xls');toast('ছবিসহ Excel ফাইল ডাউনলোড হয়েছে')}
+async function downloadPeopleWordWithPhotos(){const {g,people}=await selectedPeople('exportGender');const rows=photoTableRows(people);const doc=`<!doctype html><html lang="bn"><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif}h2{text-align:center}table{border-collapse:collapse;width:100%;table-layout:fixed}td,th{border:1px solid #777;padding:7px;text-align:left;vertical-align:middle;overflow-wrap:anywhere}.person-print-photo{width:24mm;height:30mm;object-fit:contain}.photo-cell{text-align:center}tr{page-break-inside:avoid}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${bn(people.length)} জন</p><table><thead><tr><th>সিরিয়াল নং</th><th>ছবি</th><th>নাম, আইডি ও জন্ম নিবন্ধন</th><th>মোবাইল</th><th>পিতা / মাতা</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;exportBlob(doc,'application/msword;charset=utf-8','person-list-with-photos.doc');toast('ছবিসহ Word ফাইল ডাউনলোড হয়েছে')}
 
 async function exportData(){let people=await allPeople();let blob=new Blob([JSON.stringify({app:'PersonManager',version:1,people},null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='person-data-backup.json';a.click();URL.revokeObjectURL(a.href);toast('ব্যাকআপ ফাইল তৈরি হয়েছে')}
 async function importData(e){const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data.people))throw Error();if(!confirm(`${data.people.length}টি রেকর্ড ব্যাকআপ থেকে যোগ করবেন? একই আইডি থাকলে আগের তথ্য প্রতিস্থাপিত হবে।`))return;for(const p of data.people){if(p.id&&p.name)await putPerson({...p,photos:Array.isArray(p.photos)?p.photos:[],gender:p.gender||'অন্যান্য',created:p.created||Date.now(),updated:p.updated||Date.now()})}await render();toast('ব্যাকআপের তথ্য যোগ হয়েছে')}catch(err){alert('সঠিক ব্যাকআপ JSON ফাইল নির্বাচন করুন।')}finally{e.target.value=''}}
 
 let currentSection='dashboard',navigationReady=false;
-function showSection(id,el,addHistory=true){const valid=['dashboard','people','photos'];if(!valid.includes(id))id='dashboard';currentSection=id;$('dashboardSection').hidden=id!=='dashboard';$('dashboardPeoplePanel').hidden=id!=='dashboard';$('people').hidden=id!=='people';$('photosSection').hidden=id!=='photos';document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));const active=el||document.querySelector(`.nav-item[onclick*=\"goSection('${id}'\"]`);if(active)active.classList.add('active');closeSidebarMobile();window.scrollTo({top:0,behavior:'smooth'});if(id==='people'||id==='photos')render();if(addHistory){history.pushState({section:id},'',`#${id}`);}}
+function showSection(id,el,addHistory=true){const valid=['dashboard','people','peoplePrint','photos'];if(!valid.includes(id))id='dashboard';currentSection=id;$('dashboardSection').hidden=id!=='dashboard';$('dashboardPeoplePanel').hidden=id!=='dashboard';$('people').hidden=id!=='people';$('peoplePrintSection').hidden=id!=='peoplePrint';$('photosSection').hidden=id!=='photos';document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));const active=el||document.querySelector(`.nav-item[onclick*=\"goSection('${id}'\"]`);if(active)active.classList.add('active');closeSidebarMobile();window.scrollTo({top:0,behavior:'smooth'});if(id==='people'||id==='peoplePrint'||id==='photos')render();if(addHistory){history.pushState({section:id},'',`#${id}`);}}
 function goSection(id,el){showSection(id,el,true)}
 function goBack(){
  if($('formModal').classList.contains('show')){closeForm();return}
