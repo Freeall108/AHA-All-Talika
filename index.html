@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ব্যক্তি তথ্য ব্যবস্থাপনা</title>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#172033;--muted:#6b7280;--primary:#3157d5;--line:#e5eaf2;--green:#15966b;--pink:#d94b83;--shadow:0 8px 28px rgba(24,39,75,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Bengali","Hind Siliguri",system-ui,sans-serif}
+header{background:linear-gradient(120deg,#233f9c,#4778e8);color:#fff;padding:26px max(18px,calc((100% - 1180px)/2));}
+header h1{margin:0 0 6px;font-size:25px}header p{margin:0;color:#e5ebff;font-size:14px}
+main{max-width:1180px;margin:24px auto;padding:0 16px 40px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.stat{padding:18px;display:flex;align-items:center;gap:14px}.ico{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:22px;background:#edf1ff}
+.stat small{display:block;color:var(--muted);font-size:13px}.stat strong{font-size:27px}
+.panel{padding:20px;margin-bottom:18px}.panel h2{font-size:18px;margin:0 0 16px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:14px}
+input,select,textarea{font:inherit;border:1px solid #d8deea;border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink);width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px #3157d51a}
+.search{max-width:420px;flex:1}.btn{border:0;border-radius:10px;padding:10px 15px;font:inherit;font-weight:600;cursor:pointer;background:var(--primary);color:#fff}
+.btn.secondary{background:#edf1ff;color:#2948b2}.btn.danger{background:#fff0f2;color:#bd3151}.btn.gray{background:#eef1f5;color:#344054}
+.btn:hover{filter:brightness(.97)}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}.field.full{grid-column:1/-1}
+.gender{display:flex;gap:18px;padding:10px 0}.gender label{display:flex;gap:7px;align-items:center;font-weight:400}.gender input{width:auto}
+input[type=file]{padding:8px}.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.preview{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}.preview img{width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:650px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);font-size:14px}th{color:#667085;background:#f8faff;font-weight:600}td img{width:42px;height:42px;object-fit:cover;border-radius:9px;vertical-align:middle;margin-right:3px}.tag{padding:4px 9px;border-radius:20px;font-size:12px;background:#edf1ff;color:#3157d5}.tag.f{background:#fff0f6;color:#c23e78}.empty{text-align:center;color:var(--muted);padding:28px}
+.modal{display:none;position:fixed;inset:0;background:#10182899;z-index:5;padding:20px;overflow:auto}.modal.show{display:block}.modalbox{max-width:760px;margin:30px auto;background:white;border-radius:18px;padding:22px;box-shadow:0 20px 60px #0003}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.modalhead h2{margin:0;font-size:20px}.x{border:0;background:#eef1f5;border-radius:8px;padding:7px 11px;font-size:18px;cursor:pointer}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:11px 18px;border-radius:10px;display:none;z-index:10;box-shadow:var(--shadow)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
+.photo-thumb{cursor:zoom-in;transition:transform .15s}.photo-thumb:hover{transform:scale(1.06)}
+.lightbox{display:none;position:fixed;inset:0;background:#080d18ed;z-index:20;align-items:center;justify-content:center;padding:24px}
+.lightbox.show{display:flex}.lightbox img{max-width:95vw;max-height:88vh;object-fit:contain;border-radius:12px}
+.lightbox .x{position:absolute;right:18px;top:18px;font-size:24px}
+@media print{header,.stats,.toolbar,button,footer{display:none!important}body{background:white}main{max-width:none;margin:0;padding:0}.panel{box-shadow:none;border:0;padding:0}table{min-width:0}th,td{font-size:10pt;padding:6px}td:last-child,th:last-child{display:none}}
+@media(max-width:650px){.stats{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:15px}header h1{font-size:21px}}
+
+/* Responsive desktop/mobile application layout */
+:root{--sidebar:#172554;--sidebarText:#dbe6ff;--surface:#ffffff;--topbar:#ffffff}
+.app-layout{min-height:100vh;display:flex}
+.sidebar{width:252px;flex:0 0 252px;background:var(--sidebar);color:white;padding:22px 15px;display:flex;flex-direction:column;gap:7px;min-height:100vh;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:11px;padding:5px 9px 24px;border-bottom:1px solid #ffffff22;margin-bottom:12px}
+.brandmark{width:42px;height:42px;border-radius:13px;background:#ffffff20;display:grid;place-items:center;font-size:23px}
+.brand b{display:block;font-size:15px}.brand small{display:block;color:#b9c9f5;font-size:12px;margin-top:3px}
+.nav-label{font-size:11px;letter-spacing:1px;color:#9fb2e8;padding:13px 11px 5px}
+.nav-item{width:100%;border:0;background:transparent;color:var(--sidebarText);text-align:left;padding:12px 13px;border-radius:10px;font:inherit;cursor:pointer;display:flex;align-items:center;gap:12px}
+.nav-item span:first-child{font-size:18px;width:22px;text-align:center}.nav-item:hover,.nav-item.active{background:#ffffff1c;color:white}
+.sidebar-note{margin-top:auto;border-top:1px solid #ffffff22;padding:15px 8px 4px;color:#b9c9f5;font-size:11px;line-height:1.7}
+.app-main{min-width:0;flex:1}
+.topbar{background:var(--topbar);color:var(--ink);padding:17px 28px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);box-shadow:0 2px 12px #1a2a4a08}
+.topbar h1{font-size:21px;margin:0 0 3px}.topbar p{margin:0;color:var(--muted);font-size:12px}
+.theme-toggle,.menu-toggle{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 12px;border-radius:10px;cursor:pointer;font:inherit}
+.theme-toggle{margin-left:auto}.menu-toggle{display:none}
+.app-main main{max-width:1440px;margin:22px auto;padding:0 24px 40px}
+body.dark{--bg:#0d1424;--card:#151f32;--ink:#edf2ff;--muted:#a7b2c8;--line:#2a3850;--topbar:#121c2e;--surface:#151f32;--shadow:0 8px 28px #0003}
+body.dark input,body.dark select,body.dark textarea{background:#101a2b;color:var(--ink);border-color:#34445e}
+body.dark th{background:#1d2a40;color:#c4cee0}body.dark .btn.secondary{background:#263b68;color:#dbe6ff}
+body.dark .btn.gray{background:#29364a;color:#e1e8f5}
+body.dark .modalbox{background:var(--card);color:var(--ink)}
+body.dark .x{background:#29364a;color:#fff}
+body.dark .stat,body.dark .panel{background:var(--card)}
+body.dark .topbar{box-shadow:none}
+@media(max-width:850px){
+ .sidebar{width:225px;flex-basis:225px}
+ .app-main main{padding:0 16px 30px}
+ .topbar{padding:14px 16px}
+}
+@media(max-width:650px){
+ .app-layout{display:block}
+ .sidebar{position:fixed;z-index:30;left:-270px;top:0;width:260px;height:100dvh;min-height:0;transition:left .22s ease;box-shadow:12px 0 30px #0003}
+ .sidebar.mobile-open{left:0}
+ .menu-toggle{display:block}
+ .topbar h1{font-size:17px}.topbar p{font-size:11px}
+ .theme-toggle{padding:8px 9px}.theme-toggle span{display:none}
+ .app-main main{margin:14px auto;padding:0 12px 28px}
+ .toolbar{align-items:stretch}.toolbar>div{width:100%}
+ #exportGender{flex:1}
+ .tablewrap{border-radius:10px}
+}
+/* User-selectable layout modes */
+body.mobile-layout .app-layout{display:block}
+body.mobile-layout .sidebar{position:fixed;z-index:30;left:-270px;top:0;width:260px;height:100dvh;min-height:0;transition:left .22s ease;box-shadow:12px 0 30px #0003}
+body.mobile-layout .sidebar.mobile-open{left:0}
+body.mobile-layout .menu-toggle{display:block}
+body.mobile-layout .app-main main{margin:14px auto;padding:0 12px 28px}
+body.mobile-layout .toolbar{align-items:stretch}
+body.desktop-layout .app-layout{display:flex;min-width:720px}
+body.desktop-layout .sidebar{position:sticky;left:auto;top:0;width:252px;flex:0 0 252px;height:100vh;min-height:100vh}
+body.desktop-layout .menu-toggle{display:none}
+body.desktop-layout .sidebar.mobile-open{left:auto}
+body.desktop-layout .app-main{min-width:0}
+</style>
+</head>
+<body>
+<div class="app-layout">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="brandmark">👥</div><div><b>People Manager</b><small>তথ্য ব্যবস্থাপনা</small></div></div>
+  <div class="nav-label">মেনু</div>
+  <button class="nav-item active" onclick="goSection('dashboard',this)"><span>▦</span> ড্যাশবোর্ড</button>
+  <button class="nav-item" onclick="goSection('people',this)"><span>♙</span> সকল ব্যক্তি</button>
+  <button class="nav-item" onclick="openForm();closeSidebarMobile()"><span>＋</span> নতুন ব্যক্তি যোগ</button>
+  <div class="nav-label">ব্যাকআপ ও ডেটা</div>
+  <button class="nav-item" onclick="exportData();closeSidebarMobile()"><span>⬇</span> ব্যাকআপ ডাউনলোড</button>
+  <button class="nav-item" onclick="document.getElementById('importFile').click();closeSidebarMobile()"><span>⬆</span> ব্যাকআপ ফিরিয়ে আনুন</button>
+  <input id="importFile" type="file" accept=".json,application/json" hidden onchange="importData(event)">
+  <div class="nav-label">সেটিংস</div>
+  <button class="nav-item" onclick="toggleTheme()"><span id="themeIcon">◐</span> <span id="themeText">ডার্ক মোড</span></button>
+  <button class="nav-item" onclick="toggleLayoutMode()"><span>▣</span> <span id="layoutModeText">মোবাইল মোড চালু</span></button>
+  <div class="sidebar-note">আপনার তথ্য এই ডিভাইসের ব্রাউজারে সংরক্ষিত থাকে। নিয়মিত ব্যাকআপ রাখুন।</div>
+</aside>
+<div class="app-main">
+<header class="topbar"><button class="menu-toggle" onclick="toggleSidebarMobile()" aria-label="মেনু">☰</button><div><h1>ব্যক্তি তথ্য ব্যবস্থাপনা</h1><p>ব্যক্তির পরিচয়, ঠিকানা ও ছবি এক জায়গায় পরিচালনা করুন</p></div><button class="theme-toggle" onclick="toggleTheme()">◐ <span>থিম</span></button></header>
+<main id="dashboard">
+<section class="stats">
+ <div class="stat"><div class="ico">👥</div><div><small>মোট ব্যক্তি</small><strong id="total">০</strong></div></div>
+ <div class="stat"><div class="ico" style="background:#e8f7f1">👨</div><div><small>পুরুষ</small><strong id="male">০</strong></div></div>
+ <div class="stat"><div class="ico" style="background:#fff0f6">👩</div><div><small>মহিলা</small><strong id="female">০</strong></div></div>
+</section>
+<section class="panel" id="people">
+ <div class="toolbar"><h2 style="margin:0">সকল ব্যক্তির তালিকা</h2><button class="btn" onclick="openForm()">＋ নতুন ব্যক্তি যোগ করুন</button></div>
+ <div class="toolbar"><input class="search" id="search" placeholder="নাম, আইডি, পিতা/মাতার নাম দিয়ে খুঁজুন..." oninput="render()">
+ <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<select id="exportGender" style="width:auto;min-width:125px"><option value="সব">সব ব্যক্তি</option><option value="পুরুষ">শুধু পুরুষ</option><option value="মহিলা">শুধু মহিলা</option><option value="অন্যান্য">শুধু অন্যান্য</option></select>
+<button class="btn secondary" onclick="printAll()">প্রিন্ট / PDF</button>
+<button class="btn secondary" onclick="downloadExcel()">Excel</button>
+<button class="btn secondary" onclick="downloadWord()">Word</button>
+</div></div>
+ <div class="tablewrap"><table><thead><tr><th>সিরিয়াল নং</th><th>ছবি</th><th>নাম, আইডি ও জন্ম নিবন্ধন</th><th>মোবাইল</th><th>পিতা / মাতা</th><th>লিঙ্গ</th><th>ঠিকানা</th><th>কাজ</th></tr></thead><tbody id="rows"></tbody></table></div>
+ <div id="empty" class="empty">এখনো কোনো ব্যক্তির তথ্য যোগ করা হয়নি।</div>
+</section>
+</main>
+</div></div>
+<div class="modal" id="formModal"><div class="modalbox">
+ <div class="modalhead"><h2 id="formTitle">নতুন ব্যক্তির তথ্য</h2><button class="x" onclick="closeForm()">✕</button></div>
+ <form id="personForm" onsubmit="savePerson(event)">
+ <input type="hidden" id="personId">
+ <div class="formgrid">
+  <div class="field"><label for="name">নাম *</label><input id="name" required maxlength="120" placeholder="সম্পূর্ণ নাম"></div>
+  <div class="field"><label for="nid">আইডি নং</label><input id="nid" inputmode="numeric" maxlength="17" placeholder="১০ / ১৩ / ১৭ সংখ্যার আইডি"><div class="hint">শুধু ১০, ১৩ অথবা ১৭ সংখ্যার নম্বর গ্রহণযোগ্য</div></div>
+  <div class="field"><label for="birthReg">জন্ম নিবন্ধন নং</label><input id="birthReg" inputmode="numeric" maxlength="17" placeholder="১৭ সংখ্যার জন্ম নিবন্ধন নম্বর"><div class="hint">শুধু ১৭ সংখ্যার নম্বর গ্রহণযোগ্য</div></div>
+  <div class="field"><label for="phone">মোবাইল নম্বর</label><input id="phone" type="tel" inputmode="numeric" maxlength="13" placeholder="১১ অথবা ১৪ সংখ্যার মোবাইল নম্বর"><div class="hint">শুধু ১১ অথবা ১৪ সংখ্যার নম্বর গ্রহণযোগ্য</div></div>
+  <div class="field"><label for="father">পিতার নাম</label><input id="father" maxlength="120"></div>
+  <div class="field"><label for="mother">মাতার নাম</label><input id="mother" maxlength="120"></div>
+  <div class="field full"><label>লিঙ্গ</label><div class="gender"><label><input type="radio" name="gender" value="পুরুষ" checked> পুরুষ</label><label><input type="radio" name="gender" value="মহিলা"> মহিলা</label><label><input type="radio" name="gender" value="অন্যান্য"> অন্যান্য</label></div></div>
+  <div class="field full"><label for="address">ঠিকানা</label><textarea id="address" rows="3" maxlength="600" placeholder="গ্রাম, ডাকঘর, উপজেলা, জেলা..."></textarea></div>
+  <div class="field full"><label for="photos">একাধিক ছবি</label><input id="photos" type="file" accept="image/*" multiple><div class="hint">একাধিক ছবি নির্বাচন করতে পারবেন। ছবি আপনার ডিভাইসের ব্রাউজারে সংরক্ষিত হবে।</div><div class="preview" id="preview"></div></div>
+ </div>
+ <div class="actions"><button class="btn" type="submit">সংরক্ষণ করুন</button><button class="btn gray" type="button" onclick="closeForm()">বাতিল</button></div>
+ </form>
+</div></div>
+<div class="modal" id="viewModal"><div class="modalbox"><div class="modalhead"><h2>ব্যক্তির বিস্তারিত তথ্য</h2><button class="x" onclick="document.getElementById('viewModal').classList.remove('show')">✕</button></div><div id="details"></div></div></div>
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><button class="x" onclick="event.stopPropagation();document.getElementById('lightbox').classList.remove('show')">✕</button><img id="largePhoto" alt="বড় ছবি"></div><div id="toast"></div>
+<script>
+const DB_NAME='PersonManagerDB', STORE='people'; let db, selectedPhotos=[];
+const $=id=>document.getElementById(id);
+function bn(n){return new Intl.NumberFormat('bn-BD').format(n)}
+function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>{const d=req.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:'id'});};req.onsuccess=()=>{db=req.result;resolve()};req.onerror=()=>reject(req.error)})}
+function allPeople(){return new Promise((resolve,reject)=>{const r=db.transaction(STORE).objectStore(STORE).getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error)})}
+function putPerson(p){return new Promise((resolve,reject)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).put(p);r.onsuccess=resolve;r.onerror=()=>reject(r.error)})}
+function deletePerson(id){return new Promise((resolve,reject)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).delete(id);r.onsuccess=resolve;r.onerror=()=>reject(r.error)})}
+function toast(s){$('toast').textContent=s;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2400)}
+async function render(){let people=await allPeople(),q=$('search').value.trim().toLowerCase();$('total').textContent=bn(people.length);$('male').textContent=bn(people.filter(p=>p.gender==='পুরুষ').length);$('female').textContent=bn(people.filter(p=>p.gender==='মহিলা').length);
+let filtered=people.filter(p=>[p.name,p.nid,p.birthReg,p.phone,p.father,p.mother,p.address].join(' ').toLowerCase().includes(q)).sort((a,b)=>b.updated-a.updated);
+$('rows').innerHTML=filtered.map((p,i)=>`<tr><td>${bn(i+1)}</td><td>${p.photos?.length?`<img class="photo-thumb" onclick="showLargePhoto('${p.id}',0)" src="${p.photos[0]}" alt="ছবি">`:'—'}</td><td><b>${esc(p.name)}</b><br><small>আইডি: ${esc(p.nid||'—')}</small><br><small>জন্ম নিবন্ধন: ${esc(p.birthReg||'—')}</small></td><td>${esc(p.phone||'—')}</td><td>${esc(p.father||'—')}<br>${esc(p.mother||'—')}</td><td><span class="tag ${p.gender==='মহিলা'?'f':''}">${esc(p.gender)}</span></td><td>${esc(p.address||'—')}</td><td><button class="btn secondary" onclick="viewPerson('${p.id}')">দেখুন</button> <button class="btn gray" onclick="editPerson('${p.id}')">এডিট</button> <button class="btn danger" onclick="removePerson('${p.id}')">মুছুন</button></td></tr>`).join('');
+$('empty').style.display=filtered.length?'none':'block';}
+function digitsOnly(value){return String(value||'').trim().replace(/[০-৯]/g,d=>String('০১২৩৪৫৬৭৮৯'.indexOf(d))).replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openForm(p){$('personForm').reset();$('personId').value=p?.id||'';$('formTitle').textContent=p?'তথ্য সম্পাদনা':'নতুন ব্যক্তির তথ্য';selectedPhotos=p?.photos?[...p.photos]:[];$('name').value=p?.name||'';$('nid').value=p?.nid||'';$('birthReg').value=p?.birthReg||'';$('phone').value=p?.phone||'';$('father').value=p?.father||'';$('mother').value=p?.mother||'';$('address').value=p?.address||'';document.querySelector(`input[name="gender"][value="${p?.gender||'পুরুষ'}"]`).checked=true;$('photos').value='';showPreview();$('formModal').classList.add('show')}
+function closeForm(){$('formModal').classList.remove('show')}
+async function editPerson(id){let p=(await allPeople()).find(x=>x.id===id);if(p)openForm(p)}
+$('photos').addEventListener('change',async e=>{for(const file of e.target.files){if(!file.type.startsWith('image/'))continue;if(file.size>8*1024*1024){toast('প্রতি ছবির আকার ৮ MB-এর কম হতে হবে');continue}const data=await new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)});selectedPhotos.push(data)}e.target.value='';showPreview()});
+function showPreview(){$('preview').innerHTML=selectedPhotos.map((src,i)=>`<div style="position:relative"><img src="${src}" alt="নির্বাচিত ছবি"><button type="button" onclick="removePhoto(${i})" style="position:absolute;right:-6px;top:-7px;border:0;border-radius:50%;background:#b42318;color:white;width:22px;height:22px;cursor:pointer">×</button></div>`).join('')}
+function removePhoto(i){selectedPhotos.splice(i,1);showPreview()}
+async function savePerson(e){e.preventDefault();
+const nid=digitsOnly($('nid').value),birthReg=digitsOnly($('birthReg').value),phone=digitsOnly($('phone').value);
+if(nid && ![10,13,17].includes(nid.length)){alert('আইডি নম্বর অবশ্যই ১০, ১৩ অথবা ১৭ সংখ্যার হতে হবে।');$('nid').focus();return}
+if(birthReg && birthReg.length!==17){alert('জন্ম নিবন্ধন নম্বর অবশ্যই ১৭ সংখ্যার হতে হবে।');$('birthReg').focus();return}
+if(phone && ![11,14].includes(phone.length)){alert('মোবাইল নম্বর অবশ্যই ১১ অথবা ১৪ সংখ্যার হতে হবে।');$('phone').focus();return}
+const id=$('personId').value||crypto.randomUUID();const old=(await allPeople()).find(p=>p.id===id);const p={id,name:$('name').value.trim(),nid,birthReg,phone,father:$('father').value.trim(),mother:$('mother').value.trim(),gender:document.querySelector('input[name="gender"]:checked').value,address:$('address').value.trim(),photos:selectedPhotos,created:old?.created||Date.now(),updated:Date.now()};try{await putPerson(p);closeForm();await render();toast('তথ্য সফলভাবে সংরক্ষণ হয়েছে')}catch(err){toast('সংরক্ষণ করা যায়নি। ডিভাইসে জায়গা খালি আছে কি না দেখুন।')}}
+async function removePerson(id){if(!confirm('এই ব্যক্তির তথ্য ও ছবি স্থায়ীভাবে মুছে ফেলবেন?'))return;await deletePerson(id);render();toast('তথ্য মুছে ফেলা হয়েছে')}
+async function viewPerson(id){let p=(await allPeople()).find(x=>x.id===id);if(!p)return;$('details').innerHTML=`<h3>${esc(p.name)}</h3><p><b>আইডি নং:</b> ${esc(p.nid||'—')}</p><p><b>জন্ম নিবন্ধন নং:</b> ${esc(p.birthReg||'—')}</p><p><b>মোবাইল নম্বর:</b> ${esc(p.phone||'—')}</p><p><b>পিতার নাম:</b> ${esc(p.father||'—')}</p><p><b>মাতার নাম:</b> ${esc(p.mother||'—')}</p><p><b>লিঙ্গ:</b> ${esc(p.gender)}</p><p><b>ঠিকানা:</b> ${esc(p.address||'—')}</p><b>ছবি (${bn(p.photos?.length||0)}টি)</b><div class="preview">${(p.photos||[]).map((s,i)=>`<img onclick="showLargePhoto('${p.id}',${i})" class="photo-thumb" src="${s}" style="width:120px;height:120px;cursor:zoom-in" alt="ব্যক্তির ছবি">`).join('')||'কোনো ছবি নেই'}</div>`;$('viewModal').classList.add('show')}
+
+async function showLargePhoto(id,index){let p=(await allPeople()).find(x=>x.id===id);if(!p||!p.photos?.[index])return;$('largePhoto').src=p.photos[index];$('lightbox').classList.add('show')}
+function tableRows(people){return people.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td>${esc(p.nid||'')}</td><td>${esc(p.birthReg||'')}</td><td>${esc(p.phone||'')}</td><td>${esc(p.father||'')}</td><td>${esc(p.mother||'')}</td><td>${esc(p.gender||'')}</td><td>${esc(p.address||'')}</td></tr>`).join('')}
+function exportBlob(content,type,filename){const blob=new Blob(['\ufeff',content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function downloadExcel(){const g=$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const doc=`<html><head><meta charset="UTF-8"></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table border="1"><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;exportBlob(doc,'application/vnd.ms-excel;charset=utf-8','person-list.xls');toast('Excel ফাইল ডাউনলোড হয়েছে')}
+async function downloadWord(){const g=$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const doc=`<html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif}table{border-collapse:collapse;width:100%}td,th{border:1px solid #777;padding:6px;text-align:left}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;exportBlob(doc,'application/msword;charset=utf-8','person-list.doc');toast('Word ফাইল ডাউনলোড হয়েছে')}
+async function printAll(){const g=$('exportGender').value;const people=(await allPeople()).filter(p=>g==='সব'||p.gender===g).sort((a,b)=>a.created-b.created);const rows=tableRows(people);const w=window.open('','_blank');if(!w){alert('প্রিন্টের জন্য পপ-আপ অনুমতি দিন।');return}w.document.write(`<html><head><meta charset="UTF-8"><title>ব্যক্তি তথ্য তালিকা</title><style>body{font-family:Arial,sans-serif;padding:20px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #555;padding:7px;text-align:left;font-size:12px}h2{text-align:center}</style></head><body><h2>ব্যক্তি তথ্য তালিকা — ${esc(g)}</h2><p>মোট: ${people.length} জন</p><table><thead><tr><th>সিরিয়াল নং</th><th>নাম</th><th>আইডি নং</th><th>জন্ম নিবন্ধন নং</th><th>মোবাইল নম্বর</th><th>পিতার নাম</th><th>মাতার নাম</th><th>লিঙ্গ</th><th>ঠিকানা</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()}
+
+async function exportData(){let people=await allPeople();let blob=new Blob([JSON.stringify({app:'PersonManager',version:1,people},null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='person-data-backup.json';a.click();URL.revokeObjectURL(a.href);toast('ব্যাকআপ ফাইল তৈরি হয়েছে')}
+async function importData(e){const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data.people))throw Error();if(!confirm(`${data.people.length}টি রেকর্ড ব্যাকআপ থেকে যোগ করবেন? একই আইডি থাকলে আগের তথ্য প্রতিস্থাপিত হবে।`))return;for(const p of data.people){if(p.id&&p.name)await putPerson(p)}await render();toast('ব্যাকআপের তথ্য যোগ হয়েছে')}catch(err){alert('সঠিক ব্যাকআপ JSON ফাইল নির্বাচন করুন।')}finally{e.target.value=''}}
+
+function goSection(id,el){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');closeSidebarMobile()}
+function toggleSidebarMobile(){$('sidebar').classList.toggle('mobile-open')}
+function closeSidebarMobile(){$('sidebar').classList.remove('mobile-open')}
+function toggleTheme(){document.body.classList.toggle('dark');const dark=document.body.classList.contains('dark');$('themeText').textContent=dark?'লাইট মোড':'ডার্ক মোড';$('themeIcon').textContent=dark?'☀':'◐';try{localStorage.setItem('personManagerTheme',dark?'dark':'light')}catch(e){}}
+try{if(localStorage.getItem('personManagerTheme')==='dark'){document.body.classList.add('dark');$('themeText').textContent='লাইট মোড';$('themeIcon').textContent='☀'}}catch(e){}
+function applyLayoutMode(mode){
+ document.body.classList.remove('desktop-layout','mobile-layout');
+ if(mode==='desktop')document.body.classList.add('desktop-layout');
+ else if(mode==='mobile')document.body.classList.add('mobile-layout');
+ $('layoutModeText').textContent=mode==='desktop'?'মোবাইল মোড চালু':mode==='mobile'?'স্বয়ংক্রিয় মোড চালু':'ডেস্কটপ মোড চালু';
+ try{localStorage.setItem('personManagerLayout',mode)}catch(e){}
+}
+function toggleLayoutMode(){
+ const current=localStorage.getItem('personManagerLayout')||'auto';
+ const next=current==='auto'?'desktop':current==='desktop'?'mobile':'auto';
+ applyLayoutMode(next);closeSidebarMobile();
+}
+try{applyLayoutMode(localStorage.getItem('personManagerLayout')||'auto')}catch(e){applyLayoutMode('auto')}
+
+(async()=>{try{await openDB();await render()}catch(e){alert('এই ব্রাউজারে ডেটাবেস চালু করা যাচ্ছে না। Chrome বা Edge ব্যবহার করুন।')}})();
+</script>
+</body></html>
